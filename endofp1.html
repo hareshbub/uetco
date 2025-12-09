@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        height: 100vh;
+        background: url('bg.png') no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* HEADER */
+    .top-bar {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        gap: 15px;
+        position: relative;
+    }
+
+    .top-bar img {
+        width: 70px;
+        border-radius: 12px;
+        border: 3px solid rgba(255,240,0,0.9);
+        box-shadow: 0 0 10px rgba(255,240,0,0.6);
+    }
+
+    .top-title {
+        display: flex;
+        flex-direction: column;
+        color: black;
+        font-weight: 600;
+        font-size: 17px;
+        line-height: 1.2;
+        text-shadow: 1px 1px 2px white;
+    }
+
+    /* MAIN BUTTONS */
+    .main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        padding-bottom: 40px;
+    }
+
+    .icon-btn {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        cursor: pointer;
+        background: rgba(255,255,255,0.16);
+        backdrop-filter: blur(12px);
+        border: 3px solid rgba(255,240,0,0.8);
+        box-shadow: 0px 0px 25px rgba(255,240,0,0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s;
+        overflow: hidden;
+    }
+
+    .icon-btn img {
+        width: 75%;
+        height: 75%;
+        object-fit: contain;
+    }
+
+    .icon-btn:hover {
+        transform: scale(1.07);
+        box-shadow: 0px 0px 35px rgba(255,240,0,0.8);
+    }
+
+    /* BOTTOM ADMIN TEXT */
+    .admin-bottom {
+        text-align: center;
+        width: 100%;
+        padding-bottom: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        color: black;
+        text-shadow: 1px 1px 2px white;
+    }
+
+    @media(max-width: 600px) {
+        .main {
+            flex-direction: column;
+            gap: 30px;
+        }
+        .icon-btn {
+            width: 140px;
+            height: 140px;
+        }
+        .top-title {
+            font-size: 14px;
+        }
+        .admin-bottom {
+            font-size: 16px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="top-bar">
+    <img src="uetco.png" alt="Logo">
+    
+    <div class="top-title">
+        <span>UNIFIED ENVIRONMENT FOR</span>
+        <span>THEORIES AND CREATIVE OUTPUT</span>
+    </div>
+</div>
+
+<!-- MAIN BUTTONS -->
+<div class="main">
+
+    <div class="icon-btn" onclick="window.open('https://drive.google.com/drive/u/1/my-drive','_blank')">
+        <img src="json_icon.png" alt="Create">
+    </div>
+
+    <div class="icon-btn" onclick="window.open('https://drive.google.com/drive/u/1/my-drive','_blank')">
+        <img src="drive_icon.png" alt="Edit">
+    </div>
+
+    <div class="icon-btn" onclick="location.href='subjects.html'">
+        <img src="view_icon.png" alt="View">
+    </div>
+
+</div>
+
+<!-- BOTTOM CENTER ADMIN TEXT -->
+<div class="admin-bottom">ADMIN PAGE — ADMIN: haresh</div>
+
+</body>
+</html>

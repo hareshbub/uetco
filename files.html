@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Files</title>
+<style>
+body {
+    margin:0;
+    font-family:"Poppins",sans-serif;
+    background:url('bg.png') no-repeat center center fixed;
+    background-size:cover;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* HEADER */
+.top-bar {
+    display:flex;
+    align-items:center;
+    padding:15px 20px;
+    gap:15px;
+}
+.top-bar img {
+    width:70px;
+    border-radius:12px;
+    border:3px solid rgba(255,240,0,0.9);
+    box-shadow:0 0 10px rgba(255,240,0,0.6);
+}
+.top-title {
+    display:flex;
+    flex-direction:column;
+    color:black;
+    font-weight:600;
+    font-size:17px;
+    line-height:1.2;
+    text-shadow:1px 1px 2px white;
+}
+
+/* FILE LIST */
+.list-container {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    padding:15px;
+}
+
+.file-item {
+    padding:20px;
+    border-radius:12px;
+    font-weight:bold;
+    font-size:18px;
+    color:black;
+    cursor:pointer;
+    transition:transform 0.2s, box-shadow 0.2s;
+}
+.file-item:hover {
+    transform:scale(1.02);
+    box-shadow:0 0 10px rgba(255,240,0,0.5);
+}
+
+/* BOTTOM */
+.bottom-text {
+    text-align:center;
+    padding:15px;
+    font-weight:bold;
+    color:black;
+    font-size:20px;
+    text-shadow:1px 1px 2px white;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="top-bar">
+    <img src="uetco.png" alt="logo">
+    <div class="top-title">
+        <span>UNIFIED ENVIRONMENT FOR</span>
+        <span>THEORIES AND CREATIVE OUTPUT</span>
+    </div>
+</div>
+
+<h2 id="moduleTitle" style="text-align:center; margin:20px; color:black;">
+Files
+</h2>
+
+<!-- LIST -->
+<div class="list-container" id="listContainer"></div>
+
+<div class="bottom-text">UETCO</div>
+
+<script>
+// SAME INLINE JSON
+const data = {
+    subjects: [
+        {
+            name: "tology",
+            modules: [
+                { name: "mothaviyal", files: ["1.bg.png"] },
+                { name: "numera", files: ["2.polit.png"] }
+            ]
+        },
+        {
+            name: "tamil",
+            modules: [
+                { name: "fiction", files: ["bg.png"] },
+                { name: "non fiction", files: ["polit.png"] }
+            ]
+        },
+        {
+            name:"english",
+            modules:[
+                { name:"fiction",files:["bg.png"]},
+                { name:"non fiction",files:["polit.png"]}
+            ]
+        }
+
+    ]
+};
+
+// random pastel
+function getRandomColor(){
+    const r = Math.floor(Math.random()*156)+100;
+    const g = Math.floor(Math.random()*156)+100;
+    const b = Math.floor(Math.random()*156)+100;
+    return `rgb(${r},${g},${b})`;
+}
+
+// URL param helper
+function getParam(n){
+    const u = new URL(window.location.href);
+    return u.searchParams.get(n);
+}
+
+function renderFiles(){
+    const subjectIndex = parseInt(getParam("subjectIndex"));
+    const moduleIndex = parseInt(getParam("moduleIndex"));
+
+    if(isNaN(subjectIndex) || isNaN(moduleIndex)){
+        alert("Invalid module");
+        return;
+    }
+
+    const subject = data.subjects[subjectIndex];
+    const module = subject.modules[moduleIndex];
+    const files = module.files;
+
+    document.getElementById("moduleTitle").textContent =
+        `Files in ${module.name} (${subject.name})`;
+
+    const list = document.getElementById("listContainer");
+    list.innerHTML = "";
+
+    files.forEach((file, index)=>{
+        const div = document.createElement("div");
+        div.className = "file-item";
+        div.style.backgroundColor = getRandomColor();
+        div.textContent = `${index+1}. ${file}`;
+
+        // For now, clicking opens a dummy link
+        div.onclick = ()=>{
+            window.open(file, "_blank");
+        };
+
+        list.appendChild(div);
+    });
+}
+
+renderFiles();
+</script>
+
+</body>
+</html>
