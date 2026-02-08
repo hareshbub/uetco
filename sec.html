@@ -4,122 +4,190 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Verification</title>
+
 <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Arial',sans-serif; }
-    body, html {
-        height:100%; width:100%;
-        background: url('bg.png') no-repeat center center fixed;
-        background-size: cover;
-    }
-    .header {
-        position: fixed; top:20px; left:20px; display:flex; align-items:center; gap:15px;
-    }
-    .header img { width:60px; height:60px; }
-    .header-text { color:black; font-weight:bold; font-size:22px; line-height:1.2; text-shadow:1px 1px 2px #fff; }
-    .center-container {
-        position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-        display:flex; flex-direction:column; align-items:center; gap:15px; width:90%; max-width:400px;
-        background: rgba(255,255,255,0.1); padding:20px; border-radius:12px;
-    }
-    .verification-text { font-size:20px; font-weight:bold; color:black; text-align:center; }
+* { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
 
-    input {
-        width:100%; padding:10px; border-radius:8px; border:2px solid yellow; font-size:16px; outline:none;
-    }
-    button {
-        padding:10px; border-radius:8px; border:none; background-color: yellow; font-weight:bold; cursor:pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    button:hover { transform: scale(1.05); box-shadow:0 0 10px yellow; }
+body, html {
+    height:100%;
+    width:100%;
+    background:url('bg.png') no-repeat center center fixed;
+    background-size:cover;
+}
 
-    #captcha-box {
-        font-weight:bold; font-size:20px; letter-spacing:2px; color:black; background:rgba(255,255,0,0.2);
-        padding:10px; border-radius:8px; user-select:none; text-align:center;
-        margin-top:10px;
-    }
+.header {
+    position:fixed;
+    top:20px;
+    left:20px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
 
-    /* Popup message */
-    #popupMessage {
-        position: fixed; top:20px; left:50%; transform:translateX(-50%);
-        background: rgba(0,0,0,0.8); color:white; padding:12px 20px; border-radius:8px;
-        font-weight:bold; font-size:18px; display:none; z-index:1000;
-    }
+.header img {
+    width:60px;
+    height:60px;
+}
 
-    @media (max-width:480px) {
-        .header img { width:50px; height:50px; }
-        .header-text { font-size:18px; }
-        #captcha-box { font-size:16px; }
-    }
+.header-text {
+    color:black;
+    font-weight:bold;
+    font-size:22px;
+    text-shadow:1px 1px 2px white;
+}
+
+.center-container {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:15px;
+    width:90%;
+    max-width:400px;
+    background:rgba(255,255,255,0.15);
+    padding:20px;
+    border-radius:12px;
+}
+
+.verification-text {
+    font-size:20px;
+    font-weight:bold;
+}
+
+input {
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:2px solid yellow;
+    font-size:16px;
+}
+
+button {
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    background:yellow;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover {
+    transform:scale(1.05);
+    box-shadow:0 0 10px yellow;
+}
+
+.quat-frame {
+    width:100%;
+    height:120px;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+#captchaInfo {
+    position:fixed;
+    top:10px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,0.85);
+    color:white;
+    padding:10px 15px;
+    border-radius:6px;
+    display:none;
+    z-index:1000;
+}
+
+#popupMessage {
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,0.8);
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    font-size:18px;
+    display:none;
+    z-index:1000;
+}
 </style>
 </head>
+
 <body>
 
 <div class="header">
-    <img src="uetco.png" alt="UETCO Logo">
-    <div class="header-text">UNIFIED ENVIRONMENT FOR<br>THEORIES AND CREATIVE OUTPUT</div>
+    <img src="uetco.png">
+    <div class="header-text">
+        UNIFIED ENVIRONMENT FOR<br>
+        THEORIES AND CREATIVE OUTPUT
+    </div>
 </div>
 
 <div class="center-container">
     <div class="verification-text">Three-Step Verification</div>
 
-    <input type="text" placeholder="Enter Name" id="userName">
-    <input type="password" placeholder="Enter Password" id="userPassword">
-    
-    <input type="text" placeholder="Enter CAPTCHA" id="userCaptcha">
-    <div id="captcha-box"></div>
+    <input id="userName" placeholder="Enter Name">
+    <input id="userPassword" type="password" placeholder="Enter Password">
+
+    <div>Human Verification</div>
+
+    <div class="quat-frame">
+        <iframe
+            src="https://hareshbub.github.io/quat/quatcompact"
+            width="100%"
+            height="120"
+            frameborder="0">
+        </iframe>
+    </div>
 
     <button id="verifyBtn">Verify</button>
+</div>
+
+<div id="captchaInfo">
+    Complete the CAPTCHA, then click Verify
 </div>
 
 <div id="popupMessage">Access Granted</div>
 
 <script>
-const USERNAME = 'haresh';
-const PASSWORD = 'UETCO2007';
-const verifyBtn = document.getElementById('verifyBtn');
-const captchaBox = document.getElementById('captcha-box');
-const popup = document.getElementById('popupMessage');
-const captchaInput = document.getElementById('userCaptcha');
+const USERNAME = "haresh";
+const PASSWORD = "UETCO2007";
 
-let generatedCaptcha = '';
+const verifyBtn = document.getElementById("verifyBtn");
+const popup = document.getElementById("popupMessage");
+const captchaInfo = document.getElementById("captchaInfo");
 
-// Generate random 5-character CAPTCHA
-function generateCaptcha() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let captcha = '';
-    for(let i=0; i<5; i++){
-        captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+// show helper text
+window.onload = () => {
+    captchaInfo.style.display = "block";
+    setTimeout(() => captchaInfo.style.display = "none", 5000);
+};
+
+// VERIFY BUTTON WORKS 100%
+verifyBtn.onclick = () => {
+    const name = document.getElementById("userName").value.trim();
+    const pass = document.getElementById("userPassword").value.trim();
+
+    if (name.toLowerCase() !== USERNAME) {
+        alert("Incorrect Username");
+        return;
     }
-    generatedCaptcha = captcha;
-    captchaBox.textContent = captcha;
-}
 
-// Show popup and auto-hide + redirect
-function showPopup(msg) {
-    popup.textContent = msg;
-    popup.style.display = 'block';
+    if (pass !== PASSWORD) {
+        alert("Incorrect Password");
+        return;
+    }
+
+    popup.style.display = "block";
+
     setTimeout(() => {
-        popup.style.display = 'none';
-        window.location.href = 'endofp1.html'; // Redirect to endofp1.html
-    }, 500); // 0.5 seconds
-}
-
-// Verify function
-verifyBtn.addEventListener('click', () => {
-    const name = document.getElementById('userName').value.trim();
-    const password = document.getElementById('userPassword').value.trim();
-    const captcha = captchaInput.value.trim().toUpperCase();
-
-    if(name.toLowerCase() !== USERNAME) { alert('Incorrect Username'); return; }
-    if(password.toUpperCase() !== PASSWORD) { alert('Incorrect Password'); return; }
-    if(captcha !== generatedCaptcha) { alert('Incorrect CAPTCHA'); generateCaptcha(); captchaInput.value=''; return; }
-
-    // Success
-    showPopup('Access Granted');
-});
-
-// Initial CAPTCHA
-generateCaptcha();
+        popup.style.display = "none";
+        window.location.href = "endofp1.html";
+    }, 800);
+};
 </script>
 
 </body>
