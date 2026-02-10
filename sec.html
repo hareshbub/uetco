@@ -24,10 +24,7 @@ body, html {
     gap:15px;
 }
 
-.header img {
-    width:60px;
-    height:60px;
-}
+.header img { width:60px; height:60px; }
 
 .header-text {
     color:black;
@@ -52,10 +49,7 @@ body, html {
     border-radius:12px;
 }
 
-.verification-text {
-    font-size:20px;
-    font-weight:bold;
-}
+.verification-text { font-size:20px; font-weight:bold; }
 
 input {
     width:100%;
@@ -73,6 +67,13 @@ button {
     font-weight:bold;
     cursor:pointer;
     transition:0.2s;
+    opacity:.45;
+    pointer-events:none;
+}
+
+button.enabled {
+    opacity:1;
+    pointer-events:auto;
 }
 
 button:hover {
@@ -85,6 +86,7 @@ button:hover {
     height:120px;
     border-radius:8px;
     overflow:hidden;
+    background:white;
 }
 
 #captchaInfo {
@@ -147,7 +149,7 @@ button:hover {
 </div>
 
 <div id="captchaInfo">
-    to compleate CAPCHA ,click the first circle 4 times in regular rythm and click the next circle.
+    To complete CAPTCHA, click the first circle 4 times in regular rhythm, then click the next circle.
 </div>
 
 <div id="popupMessage">Access Granted</div>
@@ -160,13 +162,23 @@ const verifyBtn = document.getElementById("verifyBtn");
 const popup = document.getElementById("popupMessage");
 const captchaInfo = document.getElementById("captchaInfo");
 
-// show helper text
+let quatPassed = false;
+
+/* helper text */
 window.onload = () => {
     captchaInfo.style.display = "block";
     setTimeout(() => captchaInfo.style.display = "none", 5000);
 };
 
-// VERIFY BUTTON WORKS 100%
+/* LISTEN TO QUAT */
+window.addEventListener("message", e => {
+    if (e.data && e.data.type === "QUAT_PASS") {
+        quatPassed = true;
+        verifyBtn.classList.add("enabled");
+    }
+});
+
+/* VERIFY */
 verifyBtn.onclick = () => {
     const name = document.getElementById("userName").value.trim();
     const pass = document.getElementById("userPassword").value.trim();
@@ -181,6 +193,11 @@ verifyBtn.onclick = () => {
         return;
     }
 
+    if (!quatPassed) {
+        alert("Please complete human verification.");
+        return;
+    }
+
     popup.style.display = "block";
 
     setTimeout(() => {
@@ -192,5 +209,3 @@ verifyBtn.onclick = () => {
 
 </body>
 </html>
-
-
