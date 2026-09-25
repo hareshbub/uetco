@@ -1,4 +1,3 @@
-import './globals.css';
 import { subjectsSeed } from '@/lib/mock-data';
 
 export default function FilesPage({ searchParams }: { searchParams: { subject?: string; module?: string; index?: string } }) {

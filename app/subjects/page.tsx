@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import './globals.css';
 
 export default function SubjectsPage() {
   const subjects = ['tology', 'tamil', 'english', 'mathematics', 'science', 'history', 'arts', 'languages'];

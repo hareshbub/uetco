@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import './globals.css';
 import { subjectsSeed } from '@/lib/mock-data';
 
 export default function ModulesPage({ searchParams }: { searchParams: { subject?: string; index?: string } }) {

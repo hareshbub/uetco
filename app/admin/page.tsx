@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from 'react';
-import './admin.css';
+import '../admin.css';
 
 export default function AdminDashboardPage() {
   const [subjects, setSubjects] = useState<any[]>([]);

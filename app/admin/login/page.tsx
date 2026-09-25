@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import './globals.css';
 
 export default function AdminLoginPage() {
   const [form, setForm] = useState({ username: '', password: '' });
