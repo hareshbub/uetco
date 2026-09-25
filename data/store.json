@@ -1,0 +1,163 @@
+import { promises as fs } from 'fs';
+import path from 'path';
+import { subjectsSeed } from './mock-data';
+
+export type DataFile = {
+  id: string;
+  name: string;
+  url: string;
+  createdAt: string;
+};
+
+export type DataModule = {
+  id: string;
+  name: string;
+  files: DataFile[];
+  createdAt: string;
+};
+
+export type DataSubject = {
+  id: string;
+  name: string;
+  modules: DataModule[];
+  createdAt: string;
+};
+
+const storeFile = path.join(process.cwd(), 'data', 'store.json');
+
+function makeId(prefix: string) {
+  return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function seedSubjects(): DataSubject[] {
+  return subjectsSeed.map((subject, subjectIndex) => ({
+    id: `subject_${subject.name || subjectIndex}`,
+    name: subject.name,
+    createdAt: new Date().toISOString(),
+    modules: (subject.modules || []).map((module, moduleIndex) => ({
+      id: `module_${subject.name}_${module.name || moduleIndex}`,
+      name: module.name,
+      createdAt: new Date().toISOString(),
+      files: (module.files || []).map((file, fileIndex) => ({
+        id: `file_${subject.name}_${module.name}_${file.name || fileIndex}`,
+        name: file.name,
+        url: file.url,
+        createdAt: new Date().toISOString()
+      }))
+    }))
+  }));
+}
+
+async function ensureStore() {
+  try {
+    await fs.access(storeFile);
+  } catch {
+    await fs.mkdir(path.dirname(storeFile), { recursive: true });
+    await fs.writeFile(storeFile, JSON.stringify({ subjects: seedSubjects() }, null, 2), 'utf8');
+  }
+}
+
+export async function getSubjects(): Promise<DataSubject[]> {
+  await ensureStore();
+  const raw = await fs.readFile(storeFile, 'utf8');
+  const data = JSON.parse(raw || '{"subjects":[]}');
+  return data.subjects || [];
+}
+
+export async function getSubjectById(id: string): Promise<DataSubject | undefined> {
+  const subjects = await getSubjects();
+  return subjects.find((subject) => subject.id === id);
+}
+
+export async function createSubject(name: string): Promise<DataSubject> {
+  const subjects = await getSubjects();
+  const subject: DataSubject = {
+    id: makeId('subject'),
+    name,
+    modules: [],
+    createdAt: new Date().toISOString()
+  };
+
+  const next = [...subjects, subject];
+  await fs.writeFile(storeFile, JSON.stringify({ subjects: next }, null, 2), 'utf8');
+  return subject;
+}
+
+export async function updateSubject(id: string, name: string): Promise<DataSubject | undefined> {
+  const subjects = await getSubjects();
+  const subject = subjects.find((item) => item.id === id);
+  if (!subject) return undefined;
+  subject.name = name;
+  await fs.writeFile(storeFile, JSON.stringify({ subjects }, null, 2), 'utf8');
+  return subject;
+}
+
+export async function deleteSubject(id: string): Promise<boolean> {
+  const subjects = await getSubjects();
+  const next = subjects.filter((subject) => subject.id !== id);
+  if (next.length === subjects.length) return false;
+  await fs.writeFile(storeFile, JSON.stringify({ subjects: next }, null, 2), 'utf8');
+  return true;
+}
+
+export async function createModule(subjectId: string, name: string): Promise<DataModule | undefined> {
+  const subjects = await getSubjects();
+  const subject = subjects.find((item) => item.id === subjectId);
+  if (!subject) return undefined;
+
+  const moduleRecord: DataModule = {
+    id: makeId('module'),
+    name,
+    files: [],
+    createdAt: new Date().toISOString()
+  };
+
+  subject.modules = [...subject.modules, moduleRecord];
+  await fs.writeFile(storeFile, JSON.stringify({ subjects }, null, 2), 'utf8');
+  return moduleRecord;
+}
+
+export async function deleteModule(subjectId: string, moduleId: string): Promise<boolean> {
+  const subjects = await getSubjects();
+  const subject = subjects.find((item) => item.id === subjectId);
+  if (!subject) return false;
+
+  const before = subject.modules.length;
+  subject.modules = subject.modules.filter((module) => module.id !== moduleId);
+  if (subject.modules.length === before) return false;
+
+  await fs.writeFile(storeFile, JSON.stringify({ subjects }, null, 2), 'utf8');
+  return true;
+}
+
+export async function createFileRecord(subjectId: string, moduleId: string, name: string, url: string): Promise<DataFile | undefined> {
+  const subjects = await getSubjects();
+  const subject = subjects.find((item) => item.id === subjectId);
+  const module = subject?.modules.find((item) => item.id === moduleId);
+  if (!module) return undefined;
+
+  const fileRecord: DataFile = {
+    id: makeId('file'),
+    name,
+    url,
+    createdAt: new Date().toISOString()
+  };
+
+  module.files = [...module.files, fileRecord];
+  await fs.writeFile(storeFile, JSON.stringify({ subjects }, null, 2), 'utf8');
+  return fileRecord;
+}
+
+export async function deleteFile(subjectId: string, moduleId: string, fileId: string): Promise<boolean> {
+  const subjects = await getSubjects();
+  const subject = subjects.find((item) => item.id === subjectId);
+  const module = subject?.modules.find((item) => item.id === moduleId);
+  if (!module) return false;
+
+  const before = module.files.length;
+  module.files = module.files.filter((file) => file.id !== fileId);
+  if (module.files.length === before) return false;
+
+  await fs.writeFile(storeFile, JSON.stringify({ subjects }, null, 2), 'utf8');
+  return true;
+}

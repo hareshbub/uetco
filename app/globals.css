@@ -1,0 +1,19 @@
+# QUAT CAPTCHA Documentation
+
+## Overview
+The QUAT CAPTCHA is a custom interactive challenge used to preserve a human verification step before the admin dashboard is accessible.
+
+## Why it exists
+It blocks automated bots and protects admin actions from repeated invalid submissions.
+
+## How it works
+The user selects the correct sequence of circular nodes to satisfy the challenge. Once the sequence matches the expected pattern, the challenge is considered passed.
+
+## Important note
+This implementation is lightweight and intended for the current app foundation. For a production-grade deployment, a more advanced CAPTCHA provider can replace the front-end challenge while keeping the same access model.
+
+## Validation flow
+1. User enters admin credentials.
+2. CAPTCHA challenge must be completed.
+3. The app validates the credentials and challenge status.
+4. Access to the admin dashboard is granted.
